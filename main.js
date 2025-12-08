@@ -81,6 +81,9 @@ for (const handler of handlers) {
 }
 
 const allOptions = [];
+// Expose globally for debugging
+window.allSupportedFormats = allOptions;
+
 Promise.all(initPromises).then(() => {
 
   for (const handler of handlers) {
@@ -151,6 +154,8 @@ async function attemptConvertPath (inputFile, path) {
 async function buildConvertPath (file, target, path = []) {
 
   if (path.length >= 3) return null;
+
+  console.log("Trying", path.map(c => c.format.mime));
 
   const previous = path[path.length - 1];
 
