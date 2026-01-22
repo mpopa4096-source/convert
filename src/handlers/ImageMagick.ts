@@ -50,6 +50,7 @@ class ImageMagickHandler implements FormatHandler {
       return priorityIndexB - priorityIndexA;
     });
 
+    this.ready = true;
   }
 
   async doConvert (

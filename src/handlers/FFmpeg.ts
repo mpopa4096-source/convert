@@ -113,6 +113,7 @@ class FFmpegHandler implements FormatHandler {
 
     this.#ffmpeg.terminate();
 
+    this.ready = true;
   }
 
   async doConvert (
