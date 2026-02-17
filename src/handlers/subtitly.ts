@@ -1,4 +1,4 @@
-// xcc.ts - Handler for XML Closed Captions (XCC) subtitle format
+// subtitly.ts - Handler for XML Closed Captions (XCC) subtitle format
 // Code by Claude 4.5 Sonnet
 
 import type { FileData, FileFormat, FormatHandler } from "../FormatHandler.ts";
@@ -207,7 +207,7 @@ class subtitlyHandler implements FormatHandler {
     // Add default metadata if none provided
     if (!metadata || Object.keys(metadata).length === 0) {
       xccContent += '    <source>converted</source>\n';
-      xccContent += '    <language>en</language>\n';
+      xccContent += '    <language>provide-it</language>\n';
       xccContent += '    <generator>universal-file-converter</generator>\n';
     }
     
