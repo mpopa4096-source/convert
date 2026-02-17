@@ -19,7 +19,7 @@ interface XCCLine {
   textpos?: { x: number; y: number };
 }
 
-class xccHandler implements FormatHandler {
+class subtitlyHandler implements FormatHandler {
   public name: string = "xcc";
   public supportedFormats?: FileFormat[];
   public ready: boolean = false;
@@ -56,9 +56,9 @@ class xccHandler implements FormatHandler {
     const outputFiles: FileData[] = [];
 
     for (const inputFile of inputFiles) {
-      const inputText = new TextDecoder().decode(inputFile.data);
+      const inputText = new TextDecoder().decode(inputFile.bytes);
 
-      let outputData: Uint8Array;
+      let outputbytes: Uint8Array;
       let outputName: string;
 
       if (inputFormat.internal === "xcc" && outputFormat.internal === "srt") {
@@ -75,11 +75,11 @@ class xccHandler implements FormatHandler {
         outputName = inputFile.name.replace(/\.srt$/i, ".xcc");
       } else if (inputFormat.internal === "xcc" && outputFormat.internal === "xcc") {
         // XCC to XCC (passthrough with validation)
-        outputData = new Uint8Array(inputFile.data);
+        outputData = new Uint8Array(inputFile.bytes);
         outputName = inputFile.name;
       } else if (inputFormat.internal === "srt" && outputFormat.internal === "srt") {
         // SRT to SRT (passthrough)
-        outputData = new Uint8Array(inputFile.data);
+        outputData = new Uint8Array(inputFile.bytes);
         outputName = inputFile.name;
       } else {
         throw new Error(`Unsupported conversion: ${inputFormat.format} to ${outputFormat.format}`);
@@ -87,15 +87,15 @@ class xccHandler implements FormatHandler {
 
       outputFiles.push({
         name: outputName,
-        data: outputData
+        bytes: outputData
       });
     }
 
     return outputFiles;
   }
 
-  private parseXCC(xccContent: string): { metadata: XCCMetadata; lines: XCCLine[] } {
-    const metadata: XCCMetadata = {};
+  private parseXCC(xccContent: string): { metabytes: XCCMetadata; lines: XCCLine[] } {
+    const metabytes: XCCMetadata = {};
     const lines: XCCLine[] = [];
 
     // Parse metadata
@@ -174,7 +174,7 @@ class xccHandler implements FormatHandler {
     return lines;
   }
 
-  private convertToSRT(parsed: { metadata: XCCMetadata; lines: XCCLine[] }): string {
+  private convertToSRT(parsed: { metabytes: XCCMetadata; lines: XCCLine[] }): string {
     let srtContent = '';
 
     parsed.lines.forEach((line, index) => {
@@ -257,4 +257,4 @@ class xccHandler implements FormatHandler {
   }
 }
 
-export default xccHandler;
+export default subtitlyHandler;
