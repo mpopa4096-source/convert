@@ -1,7 +1,7 @@
 import type { FileData, FileFormat, FormatHandler } from "../FormatHandler.ts";
 
 class txtToHraHandler implements FormatHandler {
-  public name: string = "txt2hra";
+  public name: string = "txtToHra";
 
   public supportedFormats: FileFormat[] = [
     {
