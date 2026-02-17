@@ -36,7 +36,11 @@ class txtToHraHandler implements FormatHandler {
     inputFormat: FileFormat,
     outputFormat: FileFormat
   ): Promise<FileData[]> {
-    console.log('[txtToHra] doConvert START', { inputFilesLength: inputFiles?.length, inputInternal: inputFormat?.internal, outputInternal: outputFormat?.internal });
+    console.log('[txtToHra] doConvert START', {
+      inputFilesLength: inputFiles?.length,
+      inputInternal: inputFormat?.internal,
+      outputInternal: outputFormat?.internal
+    });
 
     if (inputFormat.internal !== "txt" || outputFormat.internal !== "hra") {
       throw new Error("Unsupported format conversion for txt2hra handler.");
@@ -54,21 +58,25 @@ class txtToHraHandler implements FormatHandler {
       try {
         console.log(`[txtToHra] converting file[${i}] name=${file.name} bytesType=${typeof file.bytes}`);
 
-        // Normalize bytes to Uint8Array - handle ArrayBuffer / Uint8Array / string
+        // Normalize bytes to Uint8Array - robust runtime checks without `instanceof` on typed types
         let bytes: Uint8Array;
-        if (file.bytes instanceof Uint8Array) {
-          bytes = file.bytes;
+
+        if (ArrayBuffer.isView(file.bytes)) {
+          // TypedArray or DataView
+          const view = file.bytes as ArrayBufferView;
+          const buffer = (view as any).buffer as ArrayBuffer;
+          const byteOffset = (view as any).byteOffset || 0;
+          const byteLength = (view as any).byteLength || (view as any).length || (buffer ? buffer.byteLength - byteOffset : 0);
+          bytes = new Uint8Array(buffer, byteOffset, byteLength);
         } else if (file.bytes instanceof ArrayBuffer) {
           bytes = new Uint8Array(file.bytes);
-        } else if (typeof (file.bytes as any) === 'string') {
-          bytes = new TextEncoder().encode(file.bytes as any);
+        } else if (typeof file.bytes === "string") {
+          bytes = new TextEncoder().encode(file.bytes);
+        } else if (file.bytes && typeof (file.bytes as any).length === "number") {
+          // array-like (number[])
+          bytes = new Uint8Array(file.bytes as any);
         } else {
-          // Fallback attempt: treat as array-like
-          try {
-            bytes = new Uint8Array(file.bytes as any);
-          } catch (e) {
-            throw new Error(`Unsupported file.bytes type for ${file.name}`);
-          }
+          throw new Error(`Unsupported file.bytes type for ${file.name}`);
         }
 
         console.log(`[txtToHra] file[${i}] bytes.length=${bytes.length}`);
