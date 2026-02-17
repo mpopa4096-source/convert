@@ -36,6 +36,15 @@ class subtitlyHandler implements FormatHandler {
         to: true,
         internal: "xcc"
       },
+      {
+        name: "SubRip subtitle",
+        format: "SRT",
+        extension: "srt",
+        mime: "application/x-subrip",
+        from: true,
+        to: true,
+        internal: "srt"
+      }
     ];
     this.ready = true;
   }
