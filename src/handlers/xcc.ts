@@ -19,7 +19,7 @@ interface XCCLine {
   textpos?: { x: number; y: number };
 }
 
-class subtitlyHandler implements FormatHandler {
+class xccHandler implements FormatHandler {
   public name: string = "xcc";
   public supportedFormats?: FileFormat[];
   public ready: boolean = false;
@@ -257,4 +257,4 @@ class subtitlyHandler implements FormatHandler {
   }
 }
 
-export default subtitlyHandler;
+export default xccHandler;
