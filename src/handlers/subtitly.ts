@@ -58,7 +58,7 @@ class subtitlyHandler implements FormatHandler {
     for (const inputFile of inputFiles) {
       const inputText = new TextDecoder().decode(inputFile.bytes);
 
-      let outputbytes: Uint8Array;
+      let outputData: Uint8Array;
       let outputName: string;
 
       if (inputFormat.internal === "xcc" && outputFormat.internal === "srt") {
@@ -94,8 +94,8 @@ class subtitlyHandler implements FormatHandler {
     return outputFiles;
   }
 
-  private parseXCC(xccContent: string): { metabytes: XCCMetadata; lines: XCCLine[] } {
-    const metabytes: XCCMetadata = {};
+  private parseXCC(xccContent: string): { metadata: XCCMetadata; lines: XCCLine[] } {
+    const metadata: XCCMetadata = {};
     const lines: XCCLine[] = [];
 
     // Parse metadata
@@ -174,7 +174,7 @@ class subtitlyHandler implements FormatHandler {
     return lines;
   }
 
-  private convertToSRT(parsed: { metabytes: XCCMetadata; lines: XCCLine[] }): string {
+  private convertToSRT(parsed: { metadata: XCCMetadata; lines: XCCLine[] }): string {
     let srtContent = '';
 
     parsed.lines.forEach((line, index) => {
