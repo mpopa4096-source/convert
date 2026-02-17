@@ -21,7 +21,7 @@ interface XCCLine {
 }
 
 class subtitlyHandler implements FormatHandler {
-  public name: string = "xcc";
+  public name: string = "subtitly";
   public supportedFormats?: FileFormat[];
   public ready: boolean = false;
 
