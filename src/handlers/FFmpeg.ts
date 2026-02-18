@@ -136,12 +136,6 @@ class FFmpegHandler implements FormatHandler {
         }
         mimeType = normalizeMimeType(mimeType);
 
-        if (
-          !mimeType.startsWith("video/")
-          && !mimeType.startsWith("audio/")
-          && !mimeType.startsWith("image/")
-        ) continue;
-
         this.supportedFormats.push({
           name: description + (formats.length > 1 ? (" / " + format) : ""),
           format,
